@@ -1,13 +1,13 @@
 tasks {
     shadowJar {
         relocate("com.google.protobuf", "eu.kennytv.maintenance.lib.protobuf")
-        relocate("com.mysql", "eu.kennytv.maintenance.lib.mysql")
+        relocate("org.mariadb", "eu.kennytv.maintenance.lib.mariadb")
     }
 }
 
 dependencies {
     implementation(projects.maintenanceCoreProxy)
-    implementation(libs.mysqlConnector)
+    implementation(libs.mariadbConnector)
     implementation(libs.bstatsVelocity)
     compileOnly(libs.velocity)
     annotationProcessor(libs.velocity)
