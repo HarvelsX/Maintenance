@@ -49,7 +49,6 @@ import java.util.Set;
 import java.util.UUID;
 import java.util.logging.Level;
 import java.util.regex.Pattern;
-import net.kyori.adventure.text.Component;
 import org.jetbrains.annotations.Blocking;
 import org.jetbrains.annotations.Nullable;
 
@@ -136,12 +135,10 @@ public abstract class MaintenanceProxyPlugin extends MaintenancePlugin implement
         }
 
         eventManager.callEvent(new ServerMaintenanceChangedEvent(server, maintenance));
-        if (settingsProxy.isWebhookEnabled()) {
-            final Component message = settingsProxy.getMessage(
-                    maintenance ? "singleMaintenanceActivated" : "singleMaintenanceDeactivated",
-                    "%SERVER%", server.getName()
-            );
-            sendWebhookMessage(message, maintenance ? DiscordWebhook.EventType.MAINTENANCE_ENABLED : DiscordWebhook.EventType.MAINTENANCE_DISABLED);
+        if (maintenance) {
+            sendWebhookMessage("webhookSingleMaintenanceActivated", DiscordWebhook.EventType.MAINTENANCE_ENABLED, "%SERVER%", server.getName());
+        } else {
+            sendWebhookMessage("webhookSingleMaintenanceDeactivated", DiscordWebhook.EventType.MAINTENANCE_DISABLED, "%SERVER%", server.getName());
         }
 
         for (final String command : (maintenance ? settingsProxy.getCommandsOnMaintenanceEnable(server) : settingsProxy.getCommandsOnMaintenanceDisable(server))) {

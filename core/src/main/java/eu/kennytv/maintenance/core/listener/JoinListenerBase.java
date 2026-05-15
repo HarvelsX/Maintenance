@@ -58,7 +58,7 @@ public abstract class JoinListenerBase {
         }
 
         if (settings.isWebhookEnabled()) {
-            plugin.sendWebhookMessage(settings.getMessage("joinNotification", "%PLAYER%", sender.name()), DiscordWebhook.EventType.BLOCKED_JOIN);
+            plugin.sendWebhookMessage("webhookJoinNotification", DiscordWebhook.EventType.BLOCKED_JOIN, "%PLAYER%", sender.name());
         }
         return true;
     }

@@ -48,6 +48,8 @@ public final class EndtimerCommand extends CommandInfo {
 
         final Component message = getMessage("endtimerStarted", "%TIME%", plugin.getRunnable().getTime());
         sender.send(message);
-        plugin.sendWebhookMessage(message, DiscordWebhook.EventType.ENDTIMER_STARTED);
+        plugin.sendWebhookMessage("webhookEndtimerStarted", DiscordWebhook.EventType.ENDTIMER_STARTED,
+                "%TIME%", plugin.getRunnable().getTime(),
+                "%TIMESTAMP%", plugin.getTargetTimestamp(duration));
     }
 }

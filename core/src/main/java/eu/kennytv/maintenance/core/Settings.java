@@ -48,7 +48,7 @@ import org.jetbrains.annotations.Nullable;
 public class Settings implements eu.kennytv.maintenance.api.Settings {
     public static final String NEW_LINE_REPLACEMENT = "<br>";
     private static final int CONFIG_VERSION = 11;
-    private static final int LANGUAGE_VERSION = 4;
+    private static final int LANGUAGE_VERSION = 5;
     protected final MaintenancePlugin plugin;
     private final Map<UUID, String> whitelistedPlayers = new HashMap<>();
     private final String[] unsupportedFields;
@@ -447,6 +447,25 @@ public class Settings implements eu.kennytv.maintenance.api.Settings {
             }
         }
         return replaceNewlineVar(s).replace("<prefix>", prefixString);
+    }
+
+    public String getWebhookMessage(final String path, final String... replacements) {
+        String s = language.getString(path);
+        if (s == null) {
+            plugin.getLogger().warning("The language file is missing the following webhook message: " + path);
+            return path;
+        }
+        if (replacements.length != 0) {
+            if (replacements.length % 2 != 0) {
+                throw new IllegalArgumentException("Invalid replacement count: " + replacements.length);
+            }
+
+            for (int i = 0; i < replacements.length; i += 2) {
+                final String key = replacements[i];
+                s = s.replace(key, replacements[i + 1]);
+            }
+        }
+        return replaceNewlineVar(s);
     }
 
     public @Nullable String getLanguageStringOrNull(final String path, final String... replacements) {

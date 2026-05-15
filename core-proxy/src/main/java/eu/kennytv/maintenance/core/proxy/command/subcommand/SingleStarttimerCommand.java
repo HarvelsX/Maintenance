@@ -58,7 +58,9 @@ public final class SingleStarttimerCommand extends ProxyCommandInfo {
             plugin.startMaintenanceRunnable(duration, true);
             final Component message = getMessage("starttimerStarted", "%TIME%", plugin.getRunnable().getTime());
             sender.send(message);
-            plugin.sendWebhookMessage(message, DiscordWebhook.EventType.STARTTIMER_STARTED);
+            plugin.sendWebhookMessage("webhookStarttimerStarted", DiscordWebhook.EventType.STARTTIMER_STARTED,
+                    "%TIME%", plugin.getRunnable().getTime(),
+                    "%TIMESTAMP%", plugin.getTargetTimestamp(duration));
         } else if (args.length == 3 || args.length == 4) {
             if (checkPermission(sender, "singleserver.timer")) return;
 
@@ -84,7 +86,10 @@ public final class SingleStarttimerCommand extends ProxyCommandInfo {
                     "%SERVER%", server.getName()
             );
             sender.send(message);
-            plugin.sendWebhookMessage(message, DiscordWebhook.EventType.STARTTIMER_STARTED);
+            plugin.sendWebhookMessage("webhookSingleStarttimerStarted", DiscordWebhook.EventType.STARTTIMER_STARTED,
+                    "%TIME%", runnable.getTime(),
+                    "%SERVER%", server.getName(),
+                    "%TIMESTAMP%", plugin.getTargetTimestamp(duration));
         } else {
             sender.send(getHelpMessage());
         }

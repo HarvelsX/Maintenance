@@ -48,6 +48,8 @@ public final class StarttimerCommand extends CommandInfo {
 
         final Component message = getMessage("starttimerStarted", "%TIME%", plugin.getRunnable().getTime());
         sender.send(message);
-        plugin.sendWebhookMessage(message, DiscordWebhook.EventType.STARTTIMER_STARTED);
+        plugin.sendWebhookMessage("webhookStarttimerStarted", DiscordWebhook.EventType.STARTTIMER_STARTED,
+                "%TIME%", plugin.getRunnable().getTime(),
+                "%TIMESTAMP%", plugin.getTargetTimestamp(duration));
     }
 }

@@ -59,7 +59,9 @@ public final class SingleEndtimerCommand extends ProxyCommandInfo {
 
             final Component message = getMessage("endtimerStarted", "%TIME%", plugin.getRunnable().getTime());
             sender.send(message);
-            plugin.sendWebhookMessage(message, DiscordWebhook.EventType.ENDTIMER_STARTED);
+            plugin.sendWebhookMessage("webhookEndtimerStarted", DiscordWebhook.EventType.ENDTIMER_STARTED,
+                    "%TIME%", plugin.getRunnable().getTime(),
+                    "%TIMESTAMP%", plugin.getTargetTimestamp(duration));
         } else if (args.length == 3) {
             if (checkPermission(sender, "singleserver.timer")) return;
 
@@ -83,7 +85,10 @@ public final class SingleEndtimerCommand extends ProxyCommandInfo {
                     "%SERVER%", server.getName()
             );
             sender.send(message);
-            plugin.sendWebhookMessage(message, DiscordWebhook.EventType.ENDTIMER_STARTED);
+            plugin.sendWebhookMessage("webhookSingleEndtimerStarted", DiscordWebhook.EventType.ENDTIMER_STARTED,
+                    "%TIME%", runnable.getTime(),
+                    "%SERVER%", server.getName(),
+                    "%TIMESTAMP%", plugin.getTargetTimestamp(duration));
         } else {
             sender.send(getHelpMessage());
         }

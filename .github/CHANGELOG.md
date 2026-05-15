@@ -2,6 +2,14 @@
 This file contains update logs for this project. The top may contain a `Unreleased` section, gathering update logs for a future update during development.
 
 ---
+## 5.1.0 - May 17th 2026
+
+### Changed
+- Made Discord webhooks configurable separately from command messages, including a new `%TIMESTAMP%` parameter for Discord timestamps (e.g. `<t:%TIMESTAMP%:R>`).
+
+### Fixed
+- Velocity/Bungee: Fixed proxied-maintenance-server config loading.
+---
 ## 5.0.0 - April 17th 2026
 
 This update removes *a lot* of legacy code, making the code-base a great bit more simple and a lot more performant.
@@ -25,7 +33,7 @@ This update removes *a lot* of legacy code, making the code-base a great bit mor
 - Velocity/Bungee: **Replaced `mysql` section with `redis`**. This is a more suitable database for such reading and sharing of data and no longer means some server pings can take multiple seconds, if you have multiple proxies linked
 
 ### Fixed
-* Velocity/Bungee: Fixed the `/maintenance schedule` command for single servers having swapped time arguments.
+- Velocity/Bungee: Fixed the `/maintenance schedule` command for single servers having swapped time arguments.
 ---
 ## 4.3.0 - September 17th 2024
 ### Changed
