@@ -18,17 +18,26 @@
 package eu.kennytv.maintenance.paper.util;
 
 import eu.kennytv.maintenance.core.util.Task;
+import io.papermc.paper.threadedregions.scheduler.ScheduledTask;
 import org.bukkit.Bukkit;
 
 public final class PaperTask implements Task {
-    private final int id;
+    private final Runnable cancelAction;
 
     public PaperTask(final int id) {
-        this.id = id;
+        this.cancelAction = () -> Bukkit.getScheduler().cancelTask(id);
+    }
+
+    public PaperTask(final ScheduledTask task) {
+        this.cancelAction = task::cancel;
+    }
+
+    public PaperTask(final Runnable cancelAction) {
+        this.cancelAction = cancelAction;
     }
 
     @Override
     public void cancel() {
-        Bukkit.getScheduler().cancelTask(id);
+        cancelAction.run();
     }
 }

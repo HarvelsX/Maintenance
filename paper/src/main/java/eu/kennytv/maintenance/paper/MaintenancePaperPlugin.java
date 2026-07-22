@@ -59,7 +59,8 @@ public final class MaintenancePaperPlugin extends MaintenancePlugin {
         super(plugin.getDescription().getVersion(), ServerType.PAPER);
         this.plugin = plugin;
 
-        settings = new Settings(this, "redis", "proxied-maintenance-servers", "fallback", "waiting-server", "commands-on-single-maintenance-enable", "commands-on-single-maintenance-disable");
+        settings = new Settings(this, "redis", "proxied-maintenance-servers", "fallback", "waiting-server",
+                "commands-on-single-maintenance-enable", "commands-on-single-maintenance-disable");
 
         sendEnableMessage();
 
@@ -101,7 +102,8 @@ public final class MaintenancePaperPlugin extends MaintenancePlugin {
     @Override
     public Task startMaintenanceRunnable(final Runnable runnable) {
         if (FOLIA) {
-            throw new UnsupportedOperationException("Scheduling tasks is not yet supported on Folia");
+            return new PaperTask(
+                    getServer().getGlobalRegionScheduler().runAtFixedRate(plugin, task -> runnable.run(), 1L, 20L));
         }
         return new PaperTask(getServer().getScheduler().scheduleSyncRepeatingTask(plugin, runnable, 0, 20));
     }
@@ -119,15 +121,18 @@ public final class MaintenancePaperPlugin extends MaintenancePlugin {
     }
 
     @Override
-    public void sync(Runnable runnable) {
+    public void sync(final Runnable runnable) {
+        if (FOLIA) {
+            getServer().getGlobalRegionScheduler().run(plugin, task -> runnable.run());
+            return;
+        }
         getServer().getScheduler().runTask(plugin, runnable);
     }
 
     @Override
     public void async(final Runnable runnable) {
         if (FOLIA) {
-            // Preliminary Folia support
-            runnable.run();
+            getServer().getAsyncScheduler().runNow(plugin, task -> runnable.run());
             return;
         }
         getServer().getScheduler().runTaskAsynchronously(plugin, runnable);
@@ -189,8 +194,10 @@ public final class MaintenancePaperPlugin extends MaintenancePlugin {
 
     @Override
     public List<PluginDump> getPlugins() {
-        return Arrays.stream(getServer().getPluginManager().getPlugins()).map(plugin ->
-                new PluginDump(plugin.getDescription().getName(), plugin.getDescription().getVersion(), plugin.getDescription().getAuthors())).collect(Collectors.toList());
+        return Arrays.stream(getServer().getPluginManager().getPlugins())
+                .map(plugin -> new PluginDump(plugin.getDescription().getName(), plugin.getDescription().getVersion(),
+                        plugin.getDescription().getAuthors()))
+                .collect(Collectors.toList());
     }
 
     @Override
